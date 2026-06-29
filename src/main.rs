@@ -13,6 +13,7 @@ struct Config {
 struct AircraftDetails {
     full_name: String,
     generic_name: String,
+    wasm_version: String,
 }
 
 fn splash(generic_name: &str) {
@@ -109,7 +110,7 @@ fn fs_type() -> io::Result<Simulators> {
 
     if microsoft_store20_path()?
         .join("LocalState")
-        .join("packages")
+        .join("Packages")
         .exists()
     {
         return Ok(Simulators::Msfs2020Store);
@@ -118,17 +119,17 @@ fn fs_type() -> io::Result<Simulators> {
     Ok(Simulators::None)
 }
 
-fn make_install_path(sim: &Simulators, full_name: &str) -> io::Result<PathBuf> {
+fn make_install_path(sim: &Simulators, full_name: &str, wasm: &str) -> io::Result<PathBuf> {
     let path = match sim {
         Simulators::Msfs2024Steam => steam24_path()?
             .join("WASM")
-            .join("MSFS2024")
+            .join(wasm)
             .join(full_name)
             .join("work"),
 
         Simulators::Msfs2024Store => microsoft_store24_path()?
             .join("WASM")
-            .join("MSFS2024")
+            .join(wasm)
             .join(full_name)
             .join("work"),
 
@@ -139,7 +140,7 @@ fn make_install_path(sim: &Simulators, full_name: &str) -> io::Result<PathBuf> {
 
         Simulators::Msfs2020Store => microsoft_store20_path()?
             .join("LocalState")
-            .join("packages")
+            .join("Packages")
             .join(full_name)
             .join("work"),
 
@@ -216,7 +217,8 @@ fn real_main() -> Result<(), Box<dyn std::error::Error>> {
         | Simulators::Msfs2024Store
         | Simulators::Msfs2020Steam
         | Simulators::Msfs2020Store => {
-            let work_path = make_install_path(&simulator, &aircraft.full_name)?;
+            let work_path =
+                make_install_path(&simulator, &aircraft.full_name, &aircraft.wasm_version)?;
 
             let destination = work_path.join("userinfo.txt");
 

@@ -1,5 +1,6 @@
 [aircraft_details]
 # Ensure this matches the folder name of the aircraft, such as justflight-aircraft-fokker-28
-full_name="justflight-aircraft-xxx"
+full_name = "justflight-aircraft-xxx"
 # Regular name for the aircraft
-generic_name="PLEASE CONFIGURE JF_ACTIVATOR.TOML"
+generic_name = "PLEASE CONFIGURE JF_ACTIVATOR.TOML"
+wasm_version = "MSFS2020"
